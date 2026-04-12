@@ -27,6 +27,12 @@ MACRO INIT_GBC_PALETTE
 	RGB_Set 12, 3, 13
 	RGB_Set 6, 1, 6
 	RGB_Set 3, 0, 3
+	
+	RGB_Set 24, 24, 0
+	RGB_Set 10, 10, 4
+	RGB_Set 8, 8, 1
+	RGB_Set 3, 3, 0
+
 ENDM
 
 MACRO PAINT_TILE_IN_HL
@@ -93,7 +99,7 @@ GenerateTilemap:
 		jr .draw_external
 		
 		.draw_wall:
-			PAINT_TILE_IN_HL 0
+			PAINT_TILE_IN_HL 5
 			ld a, 2
 			jr .continue
 		
