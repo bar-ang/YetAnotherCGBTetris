@@ -27,7 +27,17 @@ MACRO INIT_GBC_PALETTE
 	RGB_Set 12, 3, 13
 	RGB_Set 6, 1, 6
 	RGB_Set 3, 0, 3
+ENDM
 
+MACRO PAINT_TILE_IN_HL
+		ld a, 1
+		ld [rVBK], a
+		ld a, [hl]
+		and $F8
+		or \1
+		ld [hl], a
+		xor a
+		ld [rVBK], a
 ENDM
 
 SECTION "Initiator", ROM0
@@ -83,14 +93,17 @@ GenerateTilemap:
 		jr .draw_external
 		
 		.draw_wall:
+			PAINT_TILE_IN_HL 0
 			ld a, 2
 			jr .continue
 		
 		.draw_external:
+			PAINT_TILE_IN_HL 4
 			ld a, 1
 			jr .continue
 
 		.draw_board:
+			PAINT_TILE_IN_HL 0
 			ld a, 0
 			jr .continue
 
