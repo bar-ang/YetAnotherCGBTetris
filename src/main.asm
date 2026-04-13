@@ -4,6 +4,29 @@ INCLUDE "src/common.asm"
 INCLUDE "src/initiator.asm"
 INCLUDE "src/tiles.asm"
 
+
+SECTION "Variables", WRAM0
+DEF QUEUE_SIZE = 2
+
+Blocks:
+	; Block shape: described by one byte, each square is
+	; represented by one bit.
+	; lower nibble describes the bottom row of the block
+	; higher nibble describes the upper row of the block
+	;
+	; i.e.
+	; 7 6 5 4
+	; 3 2 1 0
+	.shape: db
+	.palette: db
+	.x: db
+	.y: db
+	.queue: ds (@ - Blocks) * (QUEUE_SIZE-1)
+
+BlockAlive: db
+
+DEF BLOCK EQU (Blocks.queue - Blocks)
+
 SECTION "Entry", ROM0[$100]
 	nop
 	jp main
@@ -13,11 +36,83 @@ SECTION "Entry", ROM0[$100]
 
 SECTION "Main", ROM0[$150]
 
+macro new_block
+	ld a, [BlockAlive]
+	xor 1
+	ld [BlockAlive], a
+
+	xor 1
+	dec a
+	and BLOCK
+	ld e, a
+	ld d, 0
+	ld hl, Blocks
+	add hl, de
+
+	ld a, \1
+	ld [hli], a
+	ld a, \2
+	ld [hli], a
+	ld a, \3
+	ld [hli], a
+	ld a, \4
+	ld [hli], a
+
+endm
+
+macro live_block_in_hl
+	ld a, [BlockAlive]
+
+	xor 1
+	dec a
+	and BLOCK
+	ld e, a
+	ld d, 0
+	ld hl, Blocks
+	add hl, de
+
+endm
+macro locate_block_pos_in_de
+	; assume block in hl
+	; TODO: Implement!
+	ld d, $99
+	ld e, $4A
+endm
+
 main:
 	call RestartScreenAndInitAll
+
+	xor a
+	ld [BlockAlive], a
+	ld [Blocks.shape], a
+	ld [Blocks.palette], a
+	ld [Blocks.x], a
+	ld [Blocks.y], a
+
+	new_block $E7, 2, 5, 9
+
+	call RenderBoard
 
 process:
 	jp process
 
 
+RenderBoard:
+	ld a, [rVBK]
+	push af
+	ld a, 1
+	ld [rVBK], a
 
+	live_block_in_hl
+	locate_block_pos_in_de
+
+	ld a, [de]
+	inc hl
+	inc hl
+	ld b, [hl]
+	and $F8
+	or b
+	ld [de], a
+
+	pop af
+	ret
