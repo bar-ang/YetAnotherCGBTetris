@@ -111,21 +111,18 @@ process:
 
 
 RenderBoard:
-	ld a, [rVBK]
-	push af
-	ld a, 1
-	ld [rVBK], a
-
 	live_block_in_hl
+
+	push hl
 	locate_block_pos_in_hl
+	pop de
+	inc de
+	inc de
 
 	ld a, [de]
-	inc hl
-	inc hl
-	ld b, [hl]
-	and $F8
-	or b
-	ld [de], a
+	ld b, a
 
-	pop af
+	call WaitVBlank
+	PAINT_TILE_IN_HL b
+	
 	ret
