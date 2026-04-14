@@ -2,6 +2,7 @@ INCLUDE "src/hardware.inc"
 INCLUDE "src/macros.asm"
 INCLUDE "src/common.asm"
 INCLUDE "src/initiator.asm"
+INCLUDE "src/clock.asm"
 INCLUDE "src/tiles.asm"
 
 
@@ -103,10 +104,14 @@ main:
 	ld [Blocks.y], a
 
 	new_block $E7, 2, 5, 9
+	
+	call InitClock
 
 	call RenderBoard
 
 process:
+	halt
+	call RenderBoard
 	jp process
 
 
