@@ -72,11 +72,24 @@ macro live_block_in_hl
 	add hl, de
 
 endm
-macro locate_block_pos_in_de
+macro locate_block_pos_in_hl
 	; assume block in hl
-	; TODO: Implement!
-	ld d, $99
-	ld e, $4A
+	inc hl
+	inc hl
+	ld e, BOARD_POS
+	ld d, 0
+	ld a, [hli]
+	add a, e
+	ld e, a
+	ld a, [hli]
+	ld c, a
+	mul32
+	ld h, b
+	ld l, c
+	add hl, de
+	ld a, h
+	add a, $98
+	ld h, a
 endm
 
 main:
@@ -104,7 +117,7 @@ RenderBoard:
 	ld [rVBK], a
 
 	live_block_in_hl
-	locate_block_pos_in_de
+	locate_block_pos_in_hl
 
 	ld a, [de]
 	inc hl
