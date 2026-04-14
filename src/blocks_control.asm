@@ -22,3 +22,26 @@ macro new_block
 
 endm
 
+macro move_block_down_single_step
+	
+	live_block_in_hl	
+	push hl
+	ld a, [BlockAlive]
+	xor 1
+	ld [BlockAlive], a
+	live_block_in_hl	
+	pop de
+
+	ld c, BLOCK
+	ld b, 0
+	push hl
+	call Memcpy
+	pop hl
+	inc hl
+	inc hl
+	inc hl
+	ld a, [hl]
+	inc a
+	ld [hl], a
+
+endm

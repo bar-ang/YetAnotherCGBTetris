@@ -86,7 +86,7 @@ main:
 
 
 process:
-	halt
+	move_block_down_single_step
 	call RenderBoard
 	jp process
 
