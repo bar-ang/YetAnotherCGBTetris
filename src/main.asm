@@ -98,7 +98,6 @@ RenderBoard:
 	locate_block_pos_in_hl
 	pop de
 	inc de
-	inc de
 
 	ld a, [de]
 	ld b, a
