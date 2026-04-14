@@ -80,7 +80,7 @@ main:
 	ld [Blocks.x], a
 	ld [Blocks.y], a
 
-	new_block $E7, 2, 5, 9
+	new_block $E7, 5, 6, 1
 	
 	call InitClock
 
