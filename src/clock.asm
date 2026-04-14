@@ -21,5 +21,13 @@ InitClock:
 
 	ret
 
+WaitForClock:
+	ld a, [ClockLength]
+	.loop:
+		halt
+		dec a
+		ret z
+		jr .loop
+
 SECTION "VBlank Int Vector", ROM0[$0040]
 	reti
