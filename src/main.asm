@@ -107,7 +107,6 @@ main:
 	
 	call InitClock
 
-	call RenderBoard
 
 process:
 	halt
