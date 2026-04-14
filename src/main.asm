@@ -1,5 +1,6 @@
 INCLUDE "src/hardware.inc"
 INCLUDE "src/macros.asm"
+INCLUDE "src/blocks_control.asm"
 INCLUDE "src/common.asm"
 INCLUDE "src/initiator.asm"
 INCLUDE "src/clock.asm"
@@ -36,30 +37,6 @@ SECTION "Entry", ROM0[$100]
 
 
 SECTION "Main", ROM0[$150]
-
-macro new_block
-	ld a, [BlockAlive]
-	xor 1
-	ld [BlockAlive], a
-
-	xor 1
-	dec a
-	and BLOCK
-	ld e, a
-	ld d, 0
-	ld hl, Blocks
-	add hl, de
-
-	ld a, \1
-	ld [hli], a
-	ld a, \2
-	ld [hli], a
-	ld a, \3
-	ld [hli], a
-	ld a, \4
-	ld [hli], a
-
-endm
 
 macro live_block_in_hl
 	ld a, [BlockAlive]
