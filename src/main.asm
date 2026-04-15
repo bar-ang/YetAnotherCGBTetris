@@ -50,6 +50,18 @@ macro live_block_in_hl
 	add hl, de
 
 endm
+
+macro dead_block_in_hl
+	ld a, [BlockAlive]
+	dec a
+	and BLOCK
+	ld e, a
+	ld d, 0
+	ld hl, Blocks
+	add hl, de
+
+endm
+
 macro locate_block_pos_in_hl
 	; assume block in hl
 	inc hl
@@ -97,7 +109,7 @@ process:
 
 
 RenderBoard:
-	live_block_in_hl
+	dead_block_in_hl
 
 	push hl
 	locate_block_pos_in_hl
@@ -108,6 +120,18 @@ RenderBoard:
 	ld b, a
 
 	call WaitVBlank
+	PAINT_TILE_IN_HL 0
+
+	live_block_in_hl
+
+	push hl
+	locate_block_pos_in_hl
+	pop de
+	inc de
+
+	ld a, [de]
+	ld b, a
+
 	PAINT_TILE_IN_HL b
 	
 	ret
