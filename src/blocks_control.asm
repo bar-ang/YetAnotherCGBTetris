@@ -50,7 +50,9 @@ macro check_block_done
 	
 	live_block_in_hl
 	locate_block_pos_in_hl
-	add l, $20
+	ld d, 0
+	ld e, $20
+	add hl, de
 	ld a, 1
 	ld [rVBK], a
 	ld a, [hl]
