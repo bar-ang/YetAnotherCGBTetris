@@ -88,6 +88,10 @@ main:
 process:
 	call WaitForClock
 	move_block_down_single_step
+	check_block_done
+	jp nz, .continue
+		new_block $E7, 5, 6, 1
+	.continue:
 	call RenderBoard
 	jp process
 

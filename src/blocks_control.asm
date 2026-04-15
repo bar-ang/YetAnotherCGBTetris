@@ -45,3 +45,15 @@ macro move_block_down_single_step
 	ld [hl], a
 
 endm
+
+macro check_block_done
+	
+	live_block_in_hl
+	locate_block_pos_in_hl
+	add l, $20
+	ld a, 1
+	ld [rVBK], a
+	ld a, [hl]
+	and 7
+
+endm
