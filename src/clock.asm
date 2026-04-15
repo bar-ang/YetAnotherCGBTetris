@@ -22,6 +22,9 @@ InitClock:
 	ret
 
 WaitForClock:
+	xor a
+	ld [rIF], a
+
 	ld a, [ClockLength]
 	.loop:
 		halt
