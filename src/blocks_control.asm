@@ -56,6 +56,10 @@ macro check_block_done
 	ld a, 1
 	ld [rVBK], a
 	ld a, [hl]
+	ld b, a
+	ld a, 0
+	ld [rVBK], a
+	ld a, b
 	and 7
 
 endm
