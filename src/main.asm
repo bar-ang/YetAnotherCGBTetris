@@ -101,7 +101,7 @@ process:
 	call WaitForClock
 	move_block_down_single_step
 	check_block_done
-	jp nz, .continue
+	jp z, .continue
 		new_block $E7, 5, 6, 1
 	.continue:
 	call RenderBoard
