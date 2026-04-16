@@ -77,9 +77,26 @@ RestartScreenAndInitAll:
 
 GenerateTilemap:
 	ld hl, $9800
-	ld bc, $240
+	ld bc, $240+$20
 	.loop:
 		push hl
+
+		ld a, h
+		sub a, $98
+		ld h, a
+		REPT 3
+		srl h
+		rr  l
+		ENDR
+		srl l
+		srl l
+		ld a, l
+		cp a, BOARD_HEIGHT
+		jp z, .draw_bound
+
+		pop hl
+		push hl
+
 		ld a, l
 		and a, $1F
 
@@ -110,6 +127,13 @@ GenerateTilemap:
 
 		.draw_board:
 			PAINT_TILE_IN_HL 0
+			ld a, 0
+			jr .continue
+
+		.draw_bound:
+			pop hl
+			push hl
+			PAINT_TILE_IN_HL 1
 			ld a, 0
 			jr .continue
 
