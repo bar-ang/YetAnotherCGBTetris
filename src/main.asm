@@ -92,7 +92,7 @@ main:
 	ld [Blocks.x], a
 	ld [Blocks.y], a
 
-	new_block $E7, 5, 6, 1
+	new_block $E7, 5, 5, -1
 	
 	call InitClock
 
@@ -101,7 +101,7 @@ process:
 	call WaitForClock
 	check_block_done
 	jp z, .continue
-		new_block $E7, 5, 6, 1
+		new_block $E7, 5, 5, -1
 	.continue:
 	move_block_down_single_step
 	call RenderBoard
