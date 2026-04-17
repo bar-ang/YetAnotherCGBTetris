@@ -101,12 +101,26 @@ main:
 
 process:
 	call WaitForClock
-	call UpdateKeys
 	check_block_done
 	jp z, .continue
 		new_block $E7, 5, 5, -1
 	.continue:
 	move_block_down_single_step
+	call UpdateKeys
+
+	ld a, [wCurKeys]
+	and a, PAD_LEFT
+	jp z, .no_left
+	move_block_left_single_step
+	.no_left:
+
+	ld a, [wCurKeys]
+	and a, PAD_RIGHT
+	jp z, .no_right
+	move_block_right_single_step
+	.no_right:
+
+
 	call RenderBoard
 	jp process
 
