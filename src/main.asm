@@ -5,6 +5,7 @@ INCLUDE "src/common.asm"
 INCLUDE "src/initiator.asm"
 INCLUDE "src/clock.asm"
 INCLUDE "src/tiles.asm"
+INCLUDE "src/io.asm"
 
 
 SECTION "Variables", WRAM0
@@ -95,10 +96,12 @@ main:
 	new_block $E7, 5, 5, -1
 	
 	call InitClock
+	call InitKeys
 
 
 process:
 	call WaitForClock
+	call UpdateKeys
 	check_block_done
 	jp z, .continue
 		new_block $E7, 5, 5, -1
