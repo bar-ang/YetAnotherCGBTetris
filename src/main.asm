@@ -121,7 +121,7 @@ process:
 	move_block_right_single_step
 	.no_right:
 
-
+	call MarkRowsToClear
 	call RenderBoard
 	jp process
 
@@ -152,4 +152,56 @@ RenderBoard:
 
 	PAINT_TILE_IN_HL b
 	
+	ret
+
+
+MarkRowsToClear:
+
+	ld l, BOARD_POS
+	ld h, $98
+
+	ld a, 1
+	ld [rVBK], a
+
+
+.next_row:
+
+	push hl
+
+	ld c, BOARD_WIDTH
+	.loop:
+		ld a, [hli]
+		and 7
+		jp z, .dont_mark_delete
+
+		dec c
+		ld a, c
+		and a
+		jp nz, .loop
+
+	ld c, BOARD_WIDTH
+	dec hl
+	.mark_delete:
+		ld a, 1 ; TODO: we need a special palette!
+		ld [hl-], a
+		
+		dec c
+		ld a, c
+		and a
+		jp nz, .mark_delete
+
+
+	.dont_mark_delete:	
+
+	pop hl
+	ld e, $20
+	ld d, 0
+	add hl, de
+	ld a, h
+	cp a, $9c
+	jp nz, .next_row
+
+	xor a
+	ld [rVBK], a
+
 	ret
