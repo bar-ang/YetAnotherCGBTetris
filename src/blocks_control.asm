@@ -22,8 +22,8 @@ macro new_block
 
 endm
 
-macro move_block_right_single_step
-
+macro blockcpy
+	
 	live_block_in_hl
 	push hl
 	ld a, [BlockAlive]
@@ -31,12 +31,15 @@ macro move_block_right_single_step
 	ld [BlockAlive], a
 	live_block_in_hl	
 	pop de
-
 	ld c, BLOCK
 	ld b, 0
-	push hl
 	call Memcpy
-	pop hl
+
+endm
+
+macro move_block_right_single_step
+
+	live_block_in_hl	
 	inc hl
 	inc hl
 	ld a, [hl]
@@ -47,19 +50,7 @@ endm
 
 macro move_block_left_single_step
 
-	live_block_in_hl
-	push hl
-	ld a, [BlockAlive]
-	xor 1
-	ld [BlockAlive], a
 	live_block_in_hl	
-	pop de
-
-	ld c, BLOCK
-	ld b, 0
-	push hl
-	call Memcpy
-	pop hl
 	inc hl
 	inc hl
 	ld a, [hl]
@@ -69,20 +60,8 @@ macro move_block_left_single_step
 endm
 
 macro move_block_down_single_step
-	
-	live_block_in_hl
-	push hl
-	ld a, [BlockAlive]
-	xor 1
-	ld [BlockAlive], a
-	live_block_in_hl	
-	pop de
 
-	ld c, BLOCK
-	ld b, 0
-	push hl
-	call Memcpy
-	pop hl
+	live_block_in_hl	
 	inc hl
 	inc hl
 	inc hl

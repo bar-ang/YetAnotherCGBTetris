@@ -105,6 +105,7 @@ process:
 	jp z, .continue
 		new_block $E7, 5, 5, -1
 	.continue:
+	blockcpy
 	move_block_down_single_step
 	call UpdateKeys
 
