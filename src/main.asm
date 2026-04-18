@@ -131,9 +131,8 @@ process:
 	jp process
 
 
-RenderBoard:
-	dead_block_in_hl
-
+macro construct_block_in_hl
+	
 	push hl
 	locate_block_pos_in_hl
 	pop de
@@ -142,21 +141,21 @@ RenderBoard:
 	ld a, [de]
 	ld b, a
 
+	PAINT_TILE_IN_HL \1
+
+endm
+
+RenderBoard:
 	call WaitVBlank
-	PAINT_TILE_IN_HL 0
+	dead_block_in_hl
+
+	construct_block_in_hl 0
 
 	live_block_in_hl
 
-	push hl
-	locate_block_pos_in_hl
-	pop de
-	inc de
+	construct_block_in_hl b
 
-	ld a, [de]
-	ld b, a
 
-	PAINT_TILE_IN_HL b
-	
 	ret
 
 
