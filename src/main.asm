@@ -157,12 +157,12 @@ macro construct_block_in_hl
 			ld b, a
 			PAINT_TILE_IN_HL b
 			pop bc
-			inc hl
+			dec hl
 			srl c
 		ENDR
 		push de
-		ld e, $1C
-		ld d, 0
+		ld e, $e4
+		ld d, $ff ; de = -$16 (two's comp of $16)
 		add hl, de
 		pop de
 	ENDR
