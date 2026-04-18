@@ -170,17 +170,13 @@ macro construct_block_in_hl
 
 endm
 
+
 RenderBoard:
 	call WaitVBlank
 	dead_block_in_hl
-
 	construct_block_in_hl 0
-
 	live_block_in_hl
-
 	construct_block_in_hl b
-
-
 	ret
 
 
