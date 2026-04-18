@@ -100,14 +100,11 @@ main:
 
 
 process:
-	call WaitForClock
 	check_block_done
 	jp z, .continue
 		new_block $E7, 5, 5, -1
 	.continue:
 	blockcpy
-	move_block_down_single_step
-	call UpdateKeys
 
 	ld a, [wCurKeys]
 	and a, PAD_LEFT
@@ -120,6 +117,13 @@ process:
 	jp z, .no_right
 	move_block_right_single_step
 	.no_right:
+
+	outofclock .nodown
+	move_block_down_single_step
+
+	.nodown:
+	call UpdateKeys
+
 
 	call MarkRowsToClear
 	call RenderBoard

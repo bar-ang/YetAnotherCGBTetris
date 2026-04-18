@@ -15,6 +15,7 @@ InitClock:
 	di
 	ld a, CLOCK_LENGTH
 	ld [ClockLength], a
+	xor a
 	ld [Tick], a
 
 	ld a, 1
@@ -34,23 +35,26 @@ WaitForClock:
 		ret z
 		jr .loop
 
-OnClock:
-	xor a
-	ld [rIF], a
-
-	halt
-
+VBlankIntHandler:
 	ld a, [Tick]
-	dec a
+	inc a
 	ld [Tick], a
 
-	and a
+	cp a, CLOCK_LENGTH
 	ret nz
 
-	ld a, CLOCK_LENGTH
+	xor a
 	ld [Tick], a
 
 	ret
 
 SECTION "VBlank Int Vector", ROM0[$0040]
+	call VBlankIntHandler
 	reti
+
+macro outofclock
+	ld a, [Tick]
+	and a
+	jp nz, \1
+
+endm
