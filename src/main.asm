@@ -136,12 +136,37 @@ macro construct_block_in_hl
 	push hl
 	locate_block_pos_in_hl
 	pop de
+
+	ld a, [de]
+	ld c, a ; c contains block's shape
 	inc de
 
 	ld a, [de]
-	ld b, a
+	ld b, a ; b contains block's color
 
-	PAINT_TILE_IN_HL \1
+	; hl contains blocks position on board
+
+	REPT 2
+		REPT 4
+			ld a, c
+			and 1
+			xor 1
+			dec a
+			and \1
+			push bc
+			ld b, a
+			PAINT_TILE_IN_HL b
+			pop bc
+			inc hl
+			srl c
+		ENDR
+		push de
+		ld e, $1C
+		ld d, 0
+		add hl, de
+		pop de
+	ENDR
+
 
 endm
 
