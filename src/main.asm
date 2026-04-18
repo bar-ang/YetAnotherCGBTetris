@@ -1,6 +1,6 @@
 INCLUDE "src/hardware.inc"
 INCLUDE "src/macros.asm"
-INCLUDE "src/blocks_control.asm"
+INCLUDE "src/blocks.asm"
 INCLUDE "src/common.asm"
 INCLUDE "src/initiator.asm"
 INCLUDE "src/clock.asm"
