@@ -100,6 +100,7 @@ main:
 
 
 process:
+	halt
 	check_block_done
 	jp z, .continue
 		new_block $E7, 5, 5, -1
