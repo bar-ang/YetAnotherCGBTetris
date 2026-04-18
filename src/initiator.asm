@@ -133,7 +133,7 @@ GenerateTilemap:
 		.draw_bound:
 			pop hl
 			push hl
-			PAINT_TILE_IN_HL 1
+			PAINT_TILE_IN_HL 3
 			ld a, 0
 			jr .continue
 
