@@ -14,6 +14,13 @@ SRC_DIR ?= src
 ASSETS_DIR ?= assets
 BUILD_DIR ?= build
 
+# --- Test discovery ---
+TEST_SRCS := $(wildcard src/test_*.asm)
+
+# Map to build outputs
+TEST_OBJS := $(patsubst src/%.asm, build/%.o, $(TEST_SRCS))
+TEST_GBS  := $(patsubst src/%.asm, build/%.gb, $(TEST_SRCS))
+
 # ----------------------------------------
 # Collect all files recursively
 # ----------------------------------------
@@ -37,8 +44,10 @@ RGBFIX = rgbfix
 # Flags
 RGBFIXFLAGS = -v -p 0xFF
 
+all: game tests
+
 # Default rule
-all: $(TARGET).gb
+game: $(TARGET).gb
 
 # ----------------------------------------
 # Rule to build output
@@ -51,6 +60,21 @@ $(TARGET).o: $(ALL_INPUTS)
 
 $(TARGET).gb: $(TARGET).o
 	$(RGBLINK) -o $@ $<
+	$(RGBFIX) $(RGBFIXFLAGS) $@
+
+# --- Test target ---
+tests: $(TEST_GBS)
+
+# --- Build rules ---
+
+# Assemble
+build/%.o: src/%.asm
+	@mkdir -p $(dir $@)
+	rgbasm -o $@ $<
+
+# Link
+build/%.gb: build/%.o
+	rgblink -o $@ $<
 	$(RGBFIX) $(RGBFIXFLAGS) $@
 
 linker_test:
@@ -81,5 +105,5 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 
-.PHONY: all clean test_compile
+.PHONY: all clean test_compile tests
 
