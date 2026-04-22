@@ -53,6 +53,27 @@ $(TARGET).gb: $(TARGET).o
 	$(RGBLINK) -o $@ $<
 	$(RGBFIX) $(RGBFIXFLAGS) $@
 
+linker_test:
+	@echo "=== TEST COMPILE START ==="
+	@echo "Source directory: $(SRC_DIR)"
+	@echo "Files:"
+	@for f in $(SRC_FILES); do echo "  - $$f"; done
+	@echo ""
+
+	@set -e; \
+	for f in $(SRC_FILES); do \
+		echo "----------------------------------------"; \
+		echo "Compiling: $$f"; \
+		obj=$$(mktemp); \
+		gb=$$(mktemp); \
+		rgbasm "$$f" -o $$obj; \
+		rgblink $$obj -o $$gb; \
+		rm -f $$obj $$gb; \
+		echo "  ✔ OK: $$f"; \
+	done; \
+	echo "----------------------------------------"; \
+	echo "=== ALL FILES COMPILED SUCCESSFULLY ==="
+
 # ----------------------------------------
 # Cleaning
 # ----------------------------------------
@@ -60,5 +81,5 @@ clean:
 	rm -rf $(BUILD_DIR)
 
 
-.PHONY: all clean
+.PHONY: all clean test_compile
 
