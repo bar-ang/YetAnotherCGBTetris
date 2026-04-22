@@ -1,0 +1,5 @@
+numpy==2.4.4
+pyboy==2.7.0
+PySDL2==0.9.17
+pysdl2-dll==2.32.0
+test @ git+https://github.com/bar-ang/testboy.git@0ebd0b632f0dc0983a1ea876d0f604abf448f5e2
