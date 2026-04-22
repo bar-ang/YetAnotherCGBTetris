@@ -1,50 +1,8 @@
-MACRO INIT_GBC_PALETTE
-  ;NOTE Screen Must be off!
-	ld a, $80
-	ld [rBCPS], a
-  
-	RGB_Set 0, 0, 0
-  RGB_Set 3, 3, 3
-  RGB_Set 7, 7, 7
-  RGB_Set 15, 15, 15
-
-  RGB_Set 3, 0, 0
-  RGB_Set 7, 0, 0
-  RGB_Set 15, 0, 0
-  RGB_Set 31, 0, 0
-
-  RGB_Set 0, 3, 0
-  RGB_Set 0, 7, 0
-  RGB_Set 0, 15, 0
-  RGB_Set 0, 31, 0
-  
-  RGB_Set 0, 0, 3
-  RGB_Set 0, 0, 7
-  RGB_Set 0, 0, 15
-	RGB_Set 0, 0, 31
-  
-	RGB_Set 24, 5, 27
-	RGB_Set 12, 3, 13
-	RGB_Set 6, 1, 6
-	RGB_Set 3, 0, 3
-	
-	RGB_Set 24, 24, 0
-	RGB_Set 10, 10, 4
-	RGB_Set 8, 8, 1
-	RGB_Set 3, 3, 0
-
-ENDM
-
-MACRO PAINT_TILE_IN_HL
-		ld a, 1
-		ld [rVBK], a
-		ld a, [hl]
-		and $F8
-		or \1
-		ld [hl], a
-		xor a
-		ld [rVBK], a
-ENDM
+INCLUDE "src/hardware.inc"
+INCLUDE "src/macros.asm"
+INCLUDE "src/common.asm"
+INCLUDE "src/modules.asm"
+INCLUDE "src/tiles.asm"
 
 SECTION "Initiator", ROM0
 

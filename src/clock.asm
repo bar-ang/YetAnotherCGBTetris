@@ -1,3 +1,7 @@
+INCLUDE "src/hardware.inc"
+
+DEF CLOCK_LENGTH EQU 10
+
 SECTION "Clock Data", WRAM0
 
 ; Measure in vbalnks.

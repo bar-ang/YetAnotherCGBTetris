@@ -1,3 +1,5 @@
+INCLUDE "src/hardware.inc"
+
 SECTION "IO", ROM0
 
 InitKeys:

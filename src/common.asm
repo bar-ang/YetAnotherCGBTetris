@@ -1,3 +1,5 @@
+INCLUDE "src/hardware.inc"
+
 SECTION "Common", ROM0
 
 DEF VISIBLE_RLY EQU 144

@@ -1,10 +1,7 @@
 INCLUDE "src/hardware.inc"
-INCLUDE "src/macros.asm"
 INCLUDE "src/blocks.asm"
-INCLUDE "src/common.asm"
-INCLUDE "src/initiator.asm"
 INCLUDE "src/clock.asm"
-INCLUDE "src/tiles.asm"
+INCLUDE "src/initiator.asm"
 INCLUDE "src/io.asm"
 
 
@@ -38,50 +35,6 @@ SECTION "Entry", ROM0[$100]
 
 
 SECTION "Main", ROM0[$150]
-
-macro live_block_in_hl
-	ld a, [BlockAlive]
-
-	xor 1
-	dec a
-	and BLOCK
-	ld e, a
-	ld d, 0
-	ld hl, Blocks
-	add hl, de
-
-endm
-
-macro dead_block_in_hl
-	ld a, [BlockAlive]
-	dec a
-	and BLOCK
-	ld e, a
-	ld d, 0
-	ld hl, Blocks
-	add hl, de
-
-endm
-
-macro locate_block_pos_in_hl
-	; assume block in hl
-	inc hl
-	inc hl
-	ld e, BOARD_POS
-	ld d, 0
-	ld a, [hli]
-	add a, e
-	ld e, a
-	ld a, [hli]
-	ld c, a
-	mul32
-	ld h, b
-	ld l, c
-	add hl, de
-	ld a, h
-	add a, $98
-	ld h, a
-endm
 
 main:
 	call RestartScreenAndInitAll
@@ -129,46 +82,6 @@ process:
 	call MarkRowsToClear
 	call RenderBoard
 	jp process
-
-
-macro construct_block_in_hl
-	
-	push hl
-	locate_block_pos_in_hl
-	pop de
-
-	ld a, [de]
-	ld c, a ; c contains block's shape
-	inc de
-
-	ld a, [de]
-	ld b, a ; b contains block's color
-
-	; hl contains blocks position on board
-
-	REPT 2
-		REPT 4
-			ld a, c
-			and 1
-			xor 1
-			dec a
-			and \1
-			push bc
-			ld b, a
-			PAINT_TILE_IN_HL b
-			pop bc
-			dec hl
-			srl c
-		ENDR
-		push de
-		ld e, $e4
-		ld d, $ff ; de = -$16 (two's comp of $16)
-		add hl, de
-		pop de
-	ENDR
-
-
-endm
 
 
 RenderBoard:
