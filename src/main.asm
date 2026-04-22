@@ -5,28 +5,6 @@ INCLUDE "src/initiator.asm"
 INCLUDE "src/io.asm"
 
 
-SECTION "Variables", WRAM0
-DEF QUEUE_SIZE = 2
-
-Blocks:
-	; Block shape: described by one byte, each square is
-	; represented by one bit.
-	; lower nibble describes the bottom row of the block
-	; higher nibble describes the upper row of the block
-	;
-	; i.e.
-	; 7 6 5 4
-	; 3 2 1 0
-	.shape: db
-	.palette: db
-	.x: db
-	.y: db
-	.queue: ds (@ - Blocks) * (QUEUE_SIZE-1)
-
-BlockAlive: db
-
-DEF BLOCK EQU (Blocks.queue - Blocks)
-
 SECTION "Entry", ROM0[$100]
 	nop
 	jp main
