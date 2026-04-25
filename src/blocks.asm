@@ -71,20 +71,3 @@ macro move_block_down_single_step
 
 endm
 
-macro check_block_done
-	
-	live_block_in_hl
-	locate_block_pos_in_hl
-	ld d, 0
-	ld e, $20
-	add hl, de
-	ld a, 1
-	ld [rVBK], a
-	ld a, [hl]
-	ld b, a
-	ld a, 0
-	ld [rVBK], a
-	ld a, b
-	and 7
-
-endm

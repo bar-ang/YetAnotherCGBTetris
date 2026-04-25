@@ -32,7 +32,7 @@ main:
 
 process:
 	halt
-	check_block_done
+	call CheckBlockDone
 	jp z, .continue
 		new_block $E7, 5, 5, -1
 	.continue:
@@ -119,5 +119,54 @@ MarkRowsToClear:
 
 	xor a
 	ld [rVBK], a
+
+	ret
+
+
+CheckBlockDone:
+	
+	live_block_in_hl
+	ld a, [hl]
+	push af
+	locate_block_pos_in_hl
+	pop bc
+
+	DEF i=0
+	REPT 4
+		push bc
+		push hl
+		ld a, b
+		and a, 17 * (1 << i)
+		jp z, .void\@
+		ld b, a
+		and a, 0xF
+		jp z, .no_add\@
+		ld a, $20
+		.no_add\@:
+		ld d, 0
+		ld e, 0
+		add a, e
+		ld e, a
+
+		ld a, i
+		add a, e
+		ld e, a
+		add hl, de
+		ld a, 1
+		ld [rVBK], a
+		ld a, [hl]
+		ld b, a
+		ld a, 0
+		ld [rVBK], a
+		ld a, b
+		and 7
+
+		.void\@:
+		pop hl
+		pop bc
+		ret nz
+
+	DEF i += 1
+	ENDR
 
 	ret
