@@ -3,15 +3,11 @@ DEF QUEUE_SIZE EQU 2
 
 
 Blocks:
-	; Block shape: described by one byte, each square is
-	; represented by one bit.
-	; lower nibble describes the bottom row of the block
-	; higher nibble describes the upper row of the block
-	;
-	; i.e.
-	; 7 6 5 4
-	; 3 2 1 0
-	.shape: db
+	; 0 1 2 4
+	; E 3 7 5
+	; D F B 6
+	; C A 9 8
+	.shape: dw
 	.palette: db
 	.x: db
 	.y: db
@@ -120,34 +116,64 @@ macro construct_block_in_hl
 	locate_block_pos_in_hl
 	pop de
 
-	ld a, [de]
-	ld c, a ; c contains block's shape
-	inc de
-
-	ld a, [de]
-	ld b, a ; b contains block's color
-
-	; hl contains blocks position on board
-
+	DEF i = 0
 	REPT 2
-		REPT 4
-			ld a, c
+		ld a, [de]
+		push de
+
+		REPT 8
+			IF i == 0
+				DEF pos = $00
+			ELIF i == 1
+				DEF pos = $01
+			ELIF i == 2
+				DEF pos = $02
+			ELIF i == 3
+				DEF pos = $21
+			ELIF i == 4
+				DEF pos = $04
+			ELIF i == 5
+				DEF pos = $23
+			ELIF i == 6
+				DEF pos = $43
+			ELIF i == 7
+				DEF pos = $22
+			ELIF i == 8
+				DEF pos = $63
+			ELIF i == 9
+				DEF pos = $62
+			ELIF i == $A
+				DEF pos = $61
+			ELIF i == $B
+				DEF pos = $42
+			ELIF i == $C
+				DEF pos = $60
+			ELIF i == $D
+				DEF pos = $40
+			ELIF i == $E
+				DEF pos = $20
+			ELIF i == $F
+				DEF pos = $41
+			ENDC
+
+
+			ld b, a
 			and 1
 			xor 1
 			dec a
-			and \1
-			push bc
-			ld b, a
-			PAINT_TILE_IN_HL b
-			pop bc
-			dec hl
-			srl c
+			push hl
+			ld de, pos
+			add hl, de
+			PAINT_TILE_IN_HL 5
+			pop hl
+			ld a, b
+			srl a
+
+		DEF i+=1
 		ENDR
-		push de
-		ld e, $e4
-		ld d, $ff ; de = -$16 (two's comp of $16)
-		add hl, de
+
 		pop de
+		inc de
 	ENDR
 
 

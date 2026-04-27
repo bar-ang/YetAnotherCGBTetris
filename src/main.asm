@@ -20,11 +20,12 @@ main:
 	xor a
 	ld [BlockAlive], a
 	ld [Blocks.shape], a
+	ld [Blocks.shape+1], a
 	ld [Blocks.palette], a
 	ld [Blocks.x], a
 	ld [Blocks.y], a
 
-	new_block $E7, 5, 5, -1
+	new_block $77, $9, 5, 5, -1
 	
 	call InitClock
 	call InitKeys
@@ -34,7 +35,7 @@ process:
 	halt
 	check_block_done
 	jp z, .continue
-		new_block $E7, 5, 5, -1
+		new_block $77, $9, 5, 5, -1
 	.continue:
 	blockcpy
 

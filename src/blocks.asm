@@ -19,6 +19,8 @@ macro new_block
 	ld [hli], a
 	ld a, \4
 	ld [hli], a
+	ld a, \5
+	ld [hli], a
 
 endm
 
