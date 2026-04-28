@@ -66,7 +66,8 @@ process:
 RenderBoard:
 	call WaitVBlank
 	dead_block_in_hl
-	construct_block_in_hl 0
+	locate_block_pos_in_hl
+	clear_block_from_screen
 	live_block_in_hl
 	construct_block_in_hl b
 	ret

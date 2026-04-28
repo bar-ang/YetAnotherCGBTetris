@@ -78,6 +78,29 @@ macro live_block_in_hl
 
 endm
 
+macro clear_block_from_screen
+	ld a, 1
+	ld [rVBK], a
+
+	REPT 4
+
+		REPT 4
+
+			ld a, [hl]
+			and a, $F7
+			ld [hl+], a
+
+		ENDR
+
+		ld de, $1C
+		add hl, de
+	ENDR
+
+	ld a, 0
+	ld [rVBK], a
+
+endm
+
 macro dead_block_in_hl
 	ld a, [BlockAlive]
 	dec a
