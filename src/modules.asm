@@ -109,12 +109,18 @@ macro locate_block_pos_in_hl
 	ld h, a
 endm
 
-
 macro construct_block_in_hl
 	
 	push hl
 	locate_block_pos_in_hl
 	pop de
+
+	ld b, d
+	ld c, e
+	inc bc
+	inc bc
+	ld a, [bc]
+	ld c, a
 
 	DEF i = 0
 	REPT 2
@@ -131,7 +137,7 @@ macro construct_block_in_hl
 			ELIF i == 3
 				DEF pos = $21
 			ELIF i == 4
-				DEF pos = $04
+				DEF pos = $03
 			ELIF i == 5
 				DEF pos = $23
 			ELIF i == 6
@@ -164,7 +170,9 @@ macro construct_block_in_hl
 			push hl
 			ld de, pos
 			add hl, de
-			PAINT_TILE_IN_HL 5
+			and a, c
+			ld d, a
+			PAINT_TILE_IN_HL d
 			pop hl
 			ld a, b
 			srl a
