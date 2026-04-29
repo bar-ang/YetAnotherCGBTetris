@@ -17,16 +17,14 @@ SECTION "Main", ROM0[$150]
 main:
 	call RestartScreenAndInitAll
 
+	ld hl, Brick
 	xor a
-	ld [BlockAlive], a
-	ld [Blocks.shape], a
-	ld [Blocks.shape+1], a
-	ld [Blocks.palette], a
-	ld [Blocks.x], a
-	ld [Blocks.y], a
+	REPT BRICK_SIZE
+		ld [hl+], a
+	ENDR
 
-	new_block $9, $77, 5, 5, -1
-	
+	call NewRandomBrick
+
 	call InitClock
 	call InitKeys
 
@@ -62,11 +60,8 @@ onClock:
 
 RenderBoard:
 	call WaitVBlank
-	dead_block_in_hl
-	locate_block_pos_in_hl
-	clear_block_from_screen
-	live_block_in_hl
-	construct_block_in_hl b
+	handle_stale_brick
+	construct_brick b
 	ret
 
 
@@ -120,3 +115,22 @@ MarkRowsToClear:
 	ld [rVBK], a
 
 	ret
+
+NewRandomBrick: ; TODO: not really random for now :)
+
+	handle_stale_brick
+
+	ld a, $9
+	ld [Brick.shape], a
+	ld a, $77
+	ld [Brick.shape+1], a
+	ld a, $5
+	ld [Brick.palette], a
+	ld a, $5
+	ld [Brick.x], a
+	ld a, $4
+	ld [Brick.y], a
+
+	ret
+
+

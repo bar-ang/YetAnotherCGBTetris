@@ -2,7 +2,7 @@ SECTION "Variables", WRAM0
 DEF QUEUE_SIZE EQU 2
 
 
-Blocks:
+Brick:
 	; 0 1 2 4
 	; E 3 7 5
 	; D F B 6
@@ -11,11 +11,11 @@ Blocks:
 	.palette: db
 	.x: db
 	.y: db
-	.queue: ds (@ - Blocks) * (QUEUE_SIZE-1)
+	.end:
 
-BlockAlive: db
+BrickStaleAddr: dw
 
-DEF BLOCK EQU (Blocks.queue - Blocks)
+DEF BRICK_SIZE EQU (Brick.end - Brick)
 
 MACRO INIT_GBC_PALETTE
   ;NOTE Screen Must be off!
@@ -65,20 +65,7 @@ MACRO PAINT_TILE_IN_HL
 		ld [rVBK], a
 ENDM
 
-macro live_block_in_hl
-	ld a, [BlockAlive]
-
-	xor 1
-	dec a
-	and BLOCK
-	ld e, a
-	ld d, 0
-	ld hl, Blocks
-	add hl, de
-
-endm
-
-macro clear_block_from_screen
+macro clear_stale_brick
 	ld a, 1
 	ld [rVBK], a
 
@@ -101,54 +88,28 @@ macro clear_block_from_screen
 
 endm
 
-macro dead_block_in_hl
-	ld a, [BlockAlive]
-	dec a
-	and BLOCK
-	ld e, a
-	ld d, 0
-	ld hl, Blocks
-	add hl, de
-
-endm
-
-macro locate_block_pos_in_hl
-	; assume block in hl
+macro locate_brick_pos_in_hl
+	ld hl, Brick
+	ld a, BOARD_POS
+	add a, [hl]
 	inc hl
-	inc hl
-	ld e, BOARD_POS
-	ld d, 0
-	ld a, [hli]
-	add a, e
-	ld e, a
-	ld a, [hli]
-	ld c, a
+	ld c, [hl]
 	mul32
-	ld h, b
-	ld l, c
-	add hl, de
-	ld a, h
-	add a, $98
-	ld h, a
+	ld h, 0
+	ld l, a
+	add hl, bc
 endm
 
-macro construct_block_in_hl
+macro construct_brick
 	
-	push hl
-	locate_block_pos_in_hl
-	pop de
+	locate_brick_pos_in_hl
 
-	ld b, d
-	ld c, e
-	inc bc
-	inc bc
-	ld a, [bc]
+	ld a, [Brick.palette]
 	ld c, a
 
 	DEF i = 0
 	REPT 2
-		ld a, [de]
-		push de
+		ld a, [Brick + i / 8]
 
 		REPT 8
 			IF i == 0
