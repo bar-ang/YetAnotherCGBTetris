@@ -25,17 +25,16 @@ main:
 	ld [Blocks.x], a
 	ld [Blocks.y], a
 
-	new_block $77, $9, 5, 5, -1
+	new_block $9, $77, 5, 5, -1
 	
 	call InitClock
 	call InitKeys
 
 process:
-	halt
-	check_block_done
-	jp z, .continue
-		new_block $77, $9, 5, 5, -1
-	.continue:
+	;check_block_done
+	;jp z, .continue
+	;	new_block $9, $77, 5, 5, -1
+	;.continue:
 
 	ld a, [wCurKeys]
 	and a, PAD_LEFT
