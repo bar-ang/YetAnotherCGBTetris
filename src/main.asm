@@ -30,14 +30,12 @@ main:
 	call InitClock
 	call InitKeys
 
-
 process:
 	halt
 	check_block_done
 	jp z, .continue
 		new_block $77, $9, 5, 5, -1
 	.continue:
-	blockcpy
 
 	ld a, [wCurKeys]
 	and a, PAD_LEFT
