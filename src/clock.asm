@@ -46,6 +46,8 @@ VBlankIntHandler:
 
 	cp a, CLOCK_LENGTH
 	ret nz
+	
+	call onClock
 
 	xor a
 	ld [Tick], a
@@ -56,9 +58,3 @@ SECTION "VBlank Int Vector", ROM0[$0040]
 	call VBlankIntHandler
 	reti
 
-macro outofclock
-	ld a, [Tick]
-	and a
-	jp nz, \1
-
-endm

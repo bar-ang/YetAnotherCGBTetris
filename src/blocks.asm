@@ -41,6 +41,7 @@ endm
 
 macro move_block_right_single_step
 
+	blockcpy
 	live_block_in_hl	
 	inc hl
 	inc hl
@@ -52,6 +53,7 @@ endm
 
 macro move_block_left_single_step
 
+	blockcpy
 	live_block_in_hl	
 	inc hl
 	inc hl
@@ -63,6 +65,7 @@ endm
 
 macro move_block_down_single_step
 
+	blockcpy
 	live_block_in_hl	
 	inc hl
 	inc hl

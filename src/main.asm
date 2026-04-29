@@ -51,17 +51,17 @@ process:
 	move_block_right_single_step
 	.no_right:
 
-	outofclock .nodown
-	move_block_down_single_step
-
-	.nodown:
 	call UpdateKeys
 
 
-	call MarkRowsToClear
+	;call MarkRowsToClear
 	call RenderBoard
 	jp process
 
+
+onClock:
+	move_block_down_single_step
+	ret
 
 RenderBoard:
 	call WaitVBlank
